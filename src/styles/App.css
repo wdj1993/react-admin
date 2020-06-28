@@ -9,7 +9,7 @@
 }
 .logo{
   height: 80px;
-  background:url('./logo.svg') center center no-repeat;
+  background:url('../assets/logo.svg') center center no-repeat;
 }
 .header{
   padding: 0 20px;
