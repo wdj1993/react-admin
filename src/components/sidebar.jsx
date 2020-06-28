@@ -1,16 +1,15 @@
 import React, { Component } from "react";
 import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
-
-import _ from "lodash";
+import { Link, withRouter  } from "react-router-dom";
 import { ROUTES } from "../router/routes.config";
+import _ from "lodash";
 
 const { Sider } = Layout;
 const routes = _.clone(ROUTES);
 
-export default class Sidebar extends Component {
-  constructor(props) {
-    super(props);
+class Sidebar extends Component {
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       activeKey: "/",
     };
@@ -22,8 +21,18 @@ export default class Sidebar extends Component {
 
   handleClick = (e) => {
     this.setState({ activeKey: e.key });
-    this.props.updateActive(e);
+    this.props.updateActive(e.key);
   };
+
+  componentDidMount() {
+    let pathname =  this.props.location.pathname;
+    let index = _.findIndex(routes, route => route.link === pathname);
+    if (index === -1) {
+        index = 0;
+    }
+    this.setState({activeKey: routes[index]['key']});
+    this.props.updateActive(routes[index]['key']);
+  }
 
   render() {
     return (
@@ -31,16 +40,13 @@ export default class Sidebar extends Component {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["Home"]}
           onClick={this.handleClick}
           selectedKeys={[this.state.activeKey]}
         >
           <div className="logo" />
           {routes.map((route) => (
-            <Menu.Item key={route.key} icon ={route.icon}>
-              <Link to={route.link}>                
-                {route.text}
-              </Link>
+            <Menu.Item key={route.key} icon={route.icon}>
+              <Link to={route.link}>{route.text}</Link>
             </Menu.Item>
           ))}
         </Menu>
@@ -48,3 +54,5 @@ export default class Sidebar extends Component {
     );
   }
 }
+
+export default withRouter(Sidebar);

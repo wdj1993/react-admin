@@ -24,8 +24,8 @@ export default class Main extends Component {
     });
   };
 
-  updateActive = (route) => {
-    this.setState({ current: route.key });
+  updateActive = (key) => {
+    this.setState({ current: key });
   };
 
   render() {
